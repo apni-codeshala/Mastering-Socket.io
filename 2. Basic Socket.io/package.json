@@ -1,0 +1,18 @@
+{
+  "dependencies": {
+    "socket.io": "^4.7.5"
+  },
+  "name": "2.-basic-socket.io",
+  "version": "1.0.0",
+  "main": "server.js",
+  "type": "commonjs",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}

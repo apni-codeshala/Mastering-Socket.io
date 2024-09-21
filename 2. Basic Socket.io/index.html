@@ -1,0 +1,21 @@
+<!DOCTYPE <html>
+<html>
+    <head>
+        <title>Socket.io first example</title>
+    </head>
+    <body>
+        <script src="/socket.io/socket.io.js"></script>
+        <script>
+            // io is a global object of this imported /socket.io/socket.io.js link
+            const socket = io("http://localhost:5000");
+            socket.on("greeting-from-server", function (message) {
+                document.body.appendChild(
+                    document.createTextNode(message.greeting),
+                );
+                socket.emit("greeting-from-client", {
+                    greeting: "Hello server",
+                });
+            });
+        </script>
+    </body>
+</html>
