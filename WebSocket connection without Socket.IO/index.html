@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>WebSocket Example</title>
+    </head>
+    <body>
+        <h1>WebSocket Test</h1>
+        <script>
+            if ("WebSocket" in window) {
+                var ws = new WebSocket("ws://localhost:5000/channel");
+                ws.onopen = function () {
+                    ws.send("Hello world");
+                };
+                ws.onmessage = function (e) {
+                    console.log(e.data);
+                };
+                ws.onclose = function () {
+                    console.warn("WebSocket disconnected");
+                };
+            } else {
+                throw new Error("This browser does not support websockets");
+            }
+        </script>
+    </body>
+</html>
