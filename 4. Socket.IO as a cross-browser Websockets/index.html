@@ -1,0 +1,37 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Cross-Browser Socket.io</title>
+    </head>
+    <body>
+        <form id="myform">
+            <textarea id="message" placeholder="Enter message"></textarea>
+            <p>
+                <button type="submit">Send</button>
+            </p>
+        </form>
+        <div id="messages"></div>
+
+        <script src="http://localhost:5000/socket.io/socket.io.js"></script>
+        <script>
+            var socket = io("http://localhost:5000");
+            // If we want to trigger something froom frontend, when connection is made than write like this
+            socket.on("connect", function () {
+                document
+                    .getElementById("myform")
+                    .addEventListener("submit", function (e) {
+                        e.preventDefault();
+                        socket.send(document.getElementById("message").value);
+                    });
+                socket.on("message", function (message) {
+                    const messageNode = document.createTextNode(message);
+                    const messageElement = document.createElement("p");
+                    messageElement.appendChild(messageNode);
+                    document
+                        .getElementById("messages")
+                        .appendChild(messageElement);
+                });
+            });
+        </script>
+    </body>
+</html>
