@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Loading data from mongoDB</title>
+        <link
+            rel="stylesheet"
+            href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"
+        />
+    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h3 class="text-primary">Recent Comments</h3>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Comment</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recent-comments">
+                            <!-- Recent Comments -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script src="/socket.io/socket.io.js"></script>
+        <script>
+            const socket = io("http://localhost:5000");
+            // Add a comment
+            socket.on("comment.add", function (data) {
+                console.log(data);
+                var $row = $(
+                    "<tr>" +
+                        "<td>" +
+                        data.user +
+                        "</td>" +
+                        "<td>" +
+                        data.comment +
+                        "</td>" +
+                        "</tr>",
+                );
+                $("#recent-comments").append($row);
+            });
+        </script>
+    </body>
+</html>
