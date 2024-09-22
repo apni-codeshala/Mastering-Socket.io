@@ -1,0 +1,1 @@
+The server-side date may be different from the client-side date if the server and the client are in different time zones. We will be able to get around this by emitting the server-side date to the client. By emitting a new date each second, the clock interface will always be accurate.
