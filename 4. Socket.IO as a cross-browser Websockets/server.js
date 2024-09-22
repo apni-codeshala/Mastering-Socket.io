@@ -26,5 +26,16 @@ io.on("connection", function (socket) {
   });
   socket.on("disconnect", function () {
     console.log("The socket disconnected");
+    // We nood to remove the disconnecting socket form array, eitherwe send message to the disconnected network so it was loss for us
+    for (var i = 0; i < sockets.length; i++) {
+      if (sockets[i].id === socket.id) {
+        sockets.splice(i, 1);
+      }
+    }
+    console.log(
+      "The socket disconnected. There are " +
+        sockets.length +
+        " connected sockets",
+    );
   });
 });

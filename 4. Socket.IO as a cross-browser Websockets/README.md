@@ -7,4 +7,4 @@ can easily determine what it is for.
 3. If you want to emulate the ease of sending a message without a topic, you can use the
 socket.send() method to send messages as needed. And we get message on other side using `socket.on('message')`
 
-4.
+4. The socket.send(...) method is a shortcut for socket.emit('message', ...)
