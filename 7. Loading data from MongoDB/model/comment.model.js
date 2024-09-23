@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require("../config/dbConfig");
 
 const commentSchema = mongoose.Schema({
   user: String,

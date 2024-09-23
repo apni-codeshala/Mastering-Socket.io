@@ -1,8 +1,13 @@
 const Comment = require("../model/comment.model");
 
 module.exports = function (socket) {
-  let stream = Comment.find().stream();
-  stream.on("data", function (comment) {
-    socket.emit("comment.add", comment);
-  });
+  const cursor = Comment.find().cursor();
+
+  cursor
+    .eachAsync((comment) => {
+      socket.emit("comment.add", comment);
+    })
+    .catch((err) => {
+      console.error(err);
+    });
 };

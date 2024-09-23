@@ -1,6 +1,6 @@
 const Comment = require("../model/comment.model");
-const connect = require("../config/dbConfig");
-const mongoose = require("mongoose");
+// const connect = require("../config/dbConfig");
+const mongoose = require("../config/dbConfig");
 
 const comments = [
   {
@@ -24,7 +24,7 @@ const comments = [
 async function seedDatabase() {
   try {
     // Connect to the database
-    await connect();
+    // await connect();
 
     // Loop over new comments and create them
     for (const commentData of comments) {
