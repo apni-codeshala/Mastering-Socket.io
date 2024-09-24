@@ -2,15 +2,59 @@
 <html>
     <head>
         <title>Live user count on website</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+            }
+            #user-list {
+                margin-top: 20px;
+            }
+        </style>
     </head>
     <body>
         <h1 id="user-count">?</h1>
         <p>Active users on this page</p>
+        <ul id="user-list"></ul>
+
         <script src="/socket.io/socket.io.js"></script>
         <script>
             const socket = io("http://localhost:5000");
-            socket.on("user.count", function (number) {
-                document.getElementById("user-count").innerHTML = number;
+            const userList = document.getElementById("user-list");
+
+            socket.on("connect", function () {
+                socket.emit("analytics.log", {
+                    userAgent: window.navigator.userAgent,
+                    location: window.location.href,
+                    track: !window.navigator.doNotTrack,
+                });
+
+                socket.on("user.count", function (number) {
+                    document.getElementById("user-count").innerHTML = number;
+                });
+
+                socket.on("newuser", function (currentUsers) {
+                    // Update the user list without re-rendering the entire DOM
+                    userList.innerHTML = ""; // Clear previous list (optional)
+                    currentUsers.forEach((user) => {
+                        const existingItem = document.getElementById(
+                            user.socketId,
+                        );
+                        if (!existingItem) {
+                            // Create a new list item if it doesn't exist
+                            const listItem = document.createElement("li");
+                            listItem.id = user.socketId; // Set id to socketId for easy access
+                            listItem.textContent = `${user.userAgent} (${user.location})`;
+                            userList.appendChild(listItem);
+                        }
+                    });
+                });
+            });
+
+            socket.on("removeuser", function (socketId) {
+                const itemToRemove = document.getElementById(socketId);
+                if (itemToRemove) {
+                    userList.removeChild(itemToRemove); // Remove user from the list
+                }
             });
         </script>
     </body>

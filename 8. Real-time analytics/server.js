@@ -18,6 +18,8 @@ server.listen(5000, function () {
 const io = socketIO(server);
 
 let count = 0;
+let currentUsers = []; // Fixed typo
+
 io.on("connection", function (socket) {
   count++;
   /**
@@ -27,8 +29,21 @@ io.on("connection", function (socket) {
    */
   // socket.emit("user.count", count);
   io.emit("user.count", count);
+
+  socket.on("analytics.log", function (analytics) {
+    const newInfo = {
+      ...analytics,
+      socketId: socket.id, // Correctly using socket.id
+    };
+    currentUsers.push(newInfo);
+    io.emit("newuser", currentUsers);
+  });
+
   socket.on("disconnect", function () {
     count--;
+    // Remove the user from currentUsers based on socket.id
+    io.emit("removeuser", socket.id);
+    currentUsers = currentUsers.filter((user) => user.socketId !== socket.id);
     io.emit("user.count", count);
   });
 });
