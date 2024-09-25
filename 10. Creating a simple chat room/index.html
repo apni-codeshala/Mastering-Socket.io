@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Creating a simple chat room</title>
+    </head>
+    <body>
+        <div class="container">
+            <form id="message-form">
+                <p>
+                    <label>Username</label>
+                    <input class="form-control" id="username" />
+                </p>
+                <p>
+                    <label>Message</label>
+                    <textarea class="form-control" id="message"></textarea>
+                </p>
+                <button class="btnbtn-primary" type="submit">Send</button>
+            </form>
+            <div id="messages"></div>
+            <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+            <script src="/socket.io/socket.io.js"></script>
+            <script>
+                const socket = io("http://localhost:5000");
+                socket.on('previous.messages', function (data) {
+                    data.map((message) => {
+                        console.log(message);
+                        $("#messages").prepend(`
+                            <div>
+                                <hr />
+                                <div><strong>${message.username}</strong></div>
+                                <p>${message.message}</p>
+                            </div>
+                        `);
+                    })
+                });
+                socket.on("message.send", function (data) {
+                    console.log(data);
+                    $("#messages").prepend(`
+                        <div>
+                            <hr />
+                            <div><strong>${data.username}</strong></div>
+                            <p>${data.message}</p>
+                        </div>
+                    `);
+                });
+                $(function () {
+                    $("#message-form").on("submit", function (e) {
+                        e.preventDefault();
+                        socket.emit("message.send", {
+                            message: $("#message").val(),
+                            username: $("#username").val(),
+                        });
+                    });
+                });
+            </script>
+        </div>
+    </body>
+</html>
