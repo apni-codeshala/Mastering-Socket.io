@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Managing the socket lifecycle</title>
+</head>
+<body>
+    <div id="users">
+
+    </div>
+    <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io('http://localhost:5000');
+        socket.on('user.add', function (id) {
+            $('#users').prepend(`<p id=${id}>${id}</p>`)
+        });
+        socket.on('user.remove', function (id) {
+            $(`#${id}`).remove();
+        });
+    </script>
+</body>
+</html>
