@@ -24,7 +24,7 @@ io.on('connection', function (socket) {
     for(let i in sockets) {
         /**
          * Here we are not using io.emit else use looping and send the emit why ?
-         * One reason is, I doesn't want to emit this event to itself else he will see itself on users liston frontend
+         * Because first time users joins we want to send the list of currently present users in the system
          * */
         socket.emit('user.add', {
             username: sockets[i].username,
