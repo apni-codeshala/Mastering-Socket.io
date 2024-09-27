@@ -20,4 +20,4 @@ io.on('connection', function (socket) {
     socket.on('user.join', function (data) {
         socket.broadcast.emit('user.joined', data);
     });
-});
+}); 
