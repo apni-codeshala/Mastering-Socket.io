@@ -53,7 +53,7 @@
             let obj = {};
             // We will compose an object of all the Xs and Os that are on the board
             $('.board button').each(function () {
-                obj[$[this].attr('id')] = $(this).text() || '';
+                obj[$(this).attr('id')] = $(this).text() || '';
             });
             return obj;
         }
@@ -88,11 +88,11 @@
         function renderTurnMessage() {
             // Disable the board if it is the opponent turn
             if (!myTurn) {
-                $('#message').text('Your opponent\'s turn.');
+                $('#messages').text('Your opponent\'s turn.');
                 $('.board button').attr('disabled', true);
                 // Enable the board if it is you turn
             } else {
-                $('#message').text('Your turn.');
+                $('#messages').text('Your turn.');
                 $('.board button').removeAttr('disabled');
             }
         }

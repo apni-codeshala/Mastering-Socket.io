@@ -36,7 +36,6 @@ function joinGame(socket) {
     } else {
         unmatched = socket.id;
     }
-    console.log(players);
 }
 
 // Return the opponent socket 
@@ -63,7 +62,7 @@ io.on('connection', function (socket) {
     }
 
     // Listen for a move to be made and emit an event to both players after the move is completed
-    socket.on('moke.move', function (data) {
+    socket.on('make.move', function (data) {
         if(!getOpponent(socket)) {
             return;
         }
