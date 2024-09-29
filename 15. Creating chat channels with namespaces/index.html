@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" />
+    <title>Creating chat channel</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row"></div>
+    </div>
+    <!--  The TransForm Programming Language (TPL) is a means by which a form designer can specify the behavior of a TransForm form as the user fills it in.
+    TPL is a traditional programming language turned to the needs of TransForm forms. While not identical to any other programming language, its syntax and semantics should be familiar and easily learned by developers familiar with languages such as Basic, JavaScript, Java, and C.
+    TPL code is used in TransForm in two main ways: Standalone expressions to calculate values for display or condition testing and multi-line functions to respond to events such as field value changes or to be called in expressions or other functions.   -->
+
+    <!-- The template in this script tag will not be executed when the page loads. We will grab it with JavaScript and manipulate it before it is rendered to the DOM: -->
+
+    <script type="text/tpl" id="namespace-group-tpl">
+        <div class="col-md-6">
+            <h1>Group ${i}</h1>
+            <form class="message-form">
+                <p>
+                    <label>Username</label>
+                    <input class="form-control input-username"/>
+                </p>
+                <p>
+                    <label>Message</label>
+                    <textarea class="form-control input-message"></textarea>
+                </p>
+                <button class="btnbtn-primary" type="submit">Send</button>
+            </form>
+            <div class="messages"></div>
+        </div>
+    </script>
+    <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        function createNamespace(i, template) {
+            const socket = io(`http://localhost:5000/group-${i}`);
+            const $el = $(template.replace(/\${i}/g, (i + 1)));
+            $('.row').append($el);
+            $el.find('.message-form').bind('submit', function (e) {
+                e.preventDefault();
+                socket.emit('message.send', {
+                    message: $el.find('.input-message').val(),
+                    username: $el.find('.input-username').val()
+                });
+            });
+            socket.on('message.sent', function (data) {
+                $el.find('.messages').prepend(`
+                    <div>
+                        <hr/>
+                        <div><strong>${data.username}</strong></div>
+                        <p>${data.message}</p>    
+                    </div>
+                `)
+            });
+        }
+        $(function () {
+            var template = $('#namespace-group-tpl').text();
+            for (var i = 0; i < 2; i++) {
+                createNamespace(i, template);
+            }
+        });
+    </script>
+</body>
+
+</html>
